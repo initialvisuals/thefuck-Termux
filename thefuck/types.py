@@ -1,8 +1,9 @@
+from importlib import util
 import os
 import sys
 from . import logs
 from .shells import shell
-from .conf import settings, load_source
+from .conf import settings
 from .const import DEFAULT_PRIORITY, ALL_ENABLED
 from .exceptions import EmptyCommand
 from .utils import get_alias, format_raw_script
@@ -129,10 +130,8 @@ class Rule(object):
     @classmethod
     def from_path(cls, path):
         """Creates rule instance from path.
-
         :type path: pathlib.Path
         :rtype: Rule
-
         """
         name = path.name[:-3]
         if name in settings.exclude_rules:
@@ -140,17 +139,19 @@ class Rule(object):
             return
         with logs.debug_time(u'Importing rule: {};'.format(name)):
             try:
-                rule_module = load_source(name, str(path))
+                spec = util.spec_from_file_location(name, str(path))
+                rule_module = util.module_from_spec(spec)
+                spec.loader.exec_module(rule_module)
             except Exception:
                 logs.exception(u"Rule {} failed to load".format(name), sys.exc_info())
                 return
         priority = getattr(rule_module, 'priority', DEFAULT_PRIORITY)
         return cls(name, rule_module.match,
-                   rule_module.get_new_command,
-                   getattr(rule_module, 'enabled_by_default', True),
-                   getattr(rule_module, 'side_effect', None),
-                   settings.priority.get(name, priority),
-                   getattr(rule_module, 'requires_output', True))
+               rule_module.get_new_command,
+               getattr(rule_module, 'enabled_by_default', True),
+               getattr(rule_module, 'side_effect', None),
+               settings.priority.get(name, priority),
+               getattr(rule_module, 'requires_output', True))
 
     @property
     def is_enabled(self):
