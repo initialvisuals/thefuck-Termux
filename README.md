@@ -14,7 +14,7 @@ python -m pip uninstall thefuck -y  # Clear any old version
 git clone https://github.com/initialvisuals/thefuck-Termux.git
 cd thefuck-Termux
 python -m pip install --user .
-
+```
 
 ## Shell Setup
 
@@ -22,7 +22,7 @@ Bash
 ```bash
 echo "eval \$(thefuck --alias)" >> ~/.bashrc
 source ~/.bashrc
-
+```
 
 Fish Shell
 ```bash
@@ -47,6 +47,7 @@ function fuck -d "Correct your previous console command"
 end
 # Save (Ctrl+O, Enter, Ctrl+X), then:
 source ~/.config/fish/config.fish
+```
 
 ## How to use
 
@@ -60,6 +61,7 @@ command not found?
 ```bash
 set -gx PATH ~/.local/bin $PATH
 cd ~/thefuck-Termux && python -m pip install --user .
+```
 
 fish config errors?
 ```bash
@@ -67,6 +69,7 @@ grep -r "thefuck" ~/.config/fish  # Find old aliases
 echo "set -gx PATH ~/.local/bin \$PATH" > ~/.config/fish/config.fish
 rm -rf ~/.config/fish/functions/*  # Backup custom stuff first!
 # Redo the Fish setup above
+```
 
 More Info
 See nvbn/thefuck for the full scoop on thefuck’s features and rules.
