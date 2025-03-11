@@ -50,10 +50,10 @@ source ~/.config/fish/config.fish
 ```
 
 ## How to use
-
+```bash
 fush    # Typo
 fuck    # Fixes to `fish`
-
+```
 ## Troubleshooting
 
 command not found?
